@@ -1,10 +1,11 @@
 {
   "name": "seed-of-fantasy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "dist/index.js",
-  "types": "./dist/**/*",
+  "types": "dist/index.d.ts",
   "files": [
-    "./dist/**/*"
+    "./dist/**/*",
+    "./dist/**/*.d.ts"
   ],
   "repository": "git@github.com:timonit/seed-of-fantasy.git",
   "author": "timonit <67180983+timonit@users.noreply.github.com>",
