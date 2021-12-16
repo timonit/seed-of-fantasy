@@ -1,0 +1,23 @@
+{
+  "name": "seed-of-fantasy",
+  "version": "0.0.2",
+  "main": "dist/index.js",
+  "files": [
+    "./dist/**/*"
+  ],
+  "repository": "git@github.com:timonit/seed-of-fantasy.git",
+  "author": "timonit <67180983+timonit@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "yarn tsc"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "typescript": "^4.4.3"
+  }
+}
