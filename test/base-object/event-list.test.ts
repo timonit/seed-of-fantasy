@@ -1,4 +1,4 @@
-import { BaseEvent, EventList } from '../../src';
+import { BaseEvent, EventEmitterList } from '../../src';
 
 class OneEvent extends BaseEvent<string> {
   name = 'one';
@@ -9,10 +9,10 @@ class TwoEvent extends BaseEvent<string> {
 }
 
 describe('PropertyList', () => {
-  let instance: EventList;
+  let instance: EventEmitterList;
 
   beforeEach(() => {
-    instance = new EventList([new OneEvent('asd'), new TwoEvent('asd')]);
+    instance = new EventEmitterList([new OneEvent('asd'), new TwoEvent('asd')]);
   });
 
   it('Define', () => {

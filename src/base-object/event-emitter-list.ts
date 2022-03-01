@@ -1,17 +1,5 @@
-import { BaseEvent } from './event';
+import { EventEmitter } from './event-emitter';
 
-export class EventList {
-  list: {[p: string]: BaseEvent<any>} = {};
-
-  addEvents(events: BaseEvent<any>[]) {
-    events.forEach((event) => {
-      this.list[event.name] = event;
-    });
-  }
-
-  constructor(events?: BaseEvent<any>[]) {
-    if (events) {
-      this.addEvents(events);
-    }
-  }
+export interface EventEmitterList {
+  [p: string]: EventEmitter;
 }

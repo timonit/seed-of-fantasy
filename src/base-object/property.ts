@@ -8,12 +8,22 @@ export abstract class Property<T>{
 
   private data: T;
 
+  entity!: Entity<any, any, any>;
+
   getValue(): T {
     return this.data;
   }
 
-  setValue(entity: Entity<any, any>, value: T): void {
+  setValue(entity: Entity<any, any, any>, value: T): void {
     this.data = this.changeValue(entity, value);
+  }
+
+  init(entity: Entity<any, any, any>): void {
+    this.entity = entity;
+    this.onInit(this.entity);
+  }
+
+  onInit(entity: Entity<any, any, any>): void {
   }
 
   constructor(value: T) {
@@ -23,7 +33,7 @@ export abstract class Property<T>{
   /**
    * Переопределите этот метод, если хотите добавить вычесление при установке значений
    */
-  protected changeValue(entity: Entity<any, any>, value: T): T {
+  protected changeValue(entity: Entity<any, any, any>, value: T): T {
     return value;
   };
 }
