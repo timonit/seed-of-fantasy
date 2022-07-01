@@ -1,39 +1,62 @@
-import { Entity } from './entity';
+type Observer = {
+  stopWatch: () => void;
+}
+
+class Subscriber<T> {
+  id: number;
+
+  cb: (value: T) => any;
+
+  static index = 0;
+
+  constructor(cb: (value: T) => any) {
+    this.id = Subscriber.generateID();
+    this.cb = cb;
+  }
+
+  static generateID(): number {
+    return this.index++;
+  }
+
+  getObserver(subscribers: Subscriber<T>[]): Observer {
+    return {
+      stopWatch: () => {
+        const index = subscribers.findIndex((sub) => sub.id === this.id);
+        subscribers.splice(index, 1);
+      }
+    }
+  }
+}
 
 /**
- * Свойство сущности
+ * Свойство
+ * Все состоит из свойств
  */
 export abstract class Property<T>{
-  abstract propertyName: string;
+  abstract readonly propertyName: string;
 
   private data: T;
 
-  entity!: Entity<any, any, any>;
+  private subscribers: Subscriber<T>[] = [];
 
-  getValue(): T {
+  get value(): T {
     return this.data;
   }
 
-  setValue(entity: Entity<any, any, any>, value: T): void {
-    this.data = this.changeValue(entity, value);
-  }
-
-  init(entity: Entity<any, any, any>): void {
-    this.entity = entity;
-    this.onInit(this.entity);
-  }
-
-  onInit(entity: Entity<any, any, any>): void {
+  protected set value(value: T) {
+    this.data = value;
+    this.subscribers.forEach((sub) => sub.cb(value));
   }
 
   constructor(value: T) {
     this.data = value;
   }
 
-  /**
-   * Переопределите этот метод, если хотите добавить вычесление при установке значений
-   */
-  protected changeValue(entity: Entity<any, any, any>, value: T): T {
-    return value;
-  };
+  watch(cb: (value: T) => any): Observer {
+    const subscriber = new Subscriber(cb);
+    this.subscribers.push(subscriber);
+    return subscriber.getObserver(this.subscribers);
+  }
+  
+  abstract change(...args: any[]): void;
 }
