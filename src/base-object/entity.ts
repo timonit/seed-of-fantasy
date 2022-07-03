@@ -1,30 +1,25 @@
 import { Meta } from './meta';
-import { PropertyList } from './property-list';
+import { Property } from './property';
+import { MetaList, PropList } from './types';
 
 /**
  * Самый базовый объект всех сущностей.
  */
-export abstract class Entity<
-  P extends PropertyList,
-  M extends Meta,
-> {
+export abstract class Entity<M extends MetaList> {
   abstract entityName: string;
 
-  properties: P;
+  private entityHierarchy: string[] = [];
+
+  properties = new Set<Property<any>>();
 
   meta: M;
 
-  constructor(propList: P, meta: M) {
-    this.properties = propList;
+  constructor(meta: M, props: P) {
     this.meta = meta;
+    props.forEach(this.properties.add);
   }
 
-  init(context: any): void {
-    Object.keys(this.properties).forEach((propName) => {
-      this.properties[propName].init(this);
-    });
-    this.onOnited(context);
+  abstract getMeta(): Meta {
+    return {};
   }
-
-  onOnited(context: any): void {}
 }

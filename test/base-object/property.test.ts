@@ -1,26 +1,26 @@
-import { Property, Entity } from '../../src';
+import { Property } from '../../src';
 
-class DemoProp extends Property<string> {
-  propertyName = 'Demo';
+class Color extends Property<string> {
+  propertyName = 'Color';
 
-  protected changeValue(entity: Entity<any, any>, value: string): string {
-    return `${value}-demo`;
+  change(value: string): void {
+    this.value = value;;
   }
 }
 
 describe('Property', () => {
-  let property: Property<any>;
+  let color: Property<any>;
 
   beforeEach(() => {
-    property = new DemoProp('test');
+    color = new Color('red');
   });
 
   it('Default value', () => {
-    expect(property.getValue()).toBe('test');
+    expect(color.value).toBe('red');
   });
 
-  it('Methods setValue and changeValue', () => {
-    property.setValue({} as unknown as Entity<any, any>, 'demo');
-    expect(property.getValue()).toBe('demo-demo');
+  it('Method change', () => {
+    color.change('green');
+    expect(color.value).toBe('green');
   });
 });

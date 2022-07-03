@@ -1,33 +1,50 @@
-import { Entity, Meta, Property, PropertyList } from '../../src';
+import { Entity, Meta, Property } from '../../src';
 
-class Duration extends Property<number> {
-  propertyName = 'duration';
+class Density extends Property<number> {
+  propertyName = 'Density';
+
+  change(density: number): void {
+    this.value = density;
+  }
 }
 
-interface FilmMeta extends Meta {
-  title: string;
+class Color extends Property<string> {
+  propertyName = 'Color';
+
+  change(color: string): void {
+    this.value = color;
+  }
 }
 
-interface FilmPropList extends PropertyList {
-  duration: Duration;
+
+interface LiquidMeta extends Meta {
 }
 
-class FilmEntity extends Entity<FilmPropList, FilmMeta> {
-  entityName = 'film';
+class Liquid extends Entity<{liquid: LiquidMeta}> {
+  entityName = 'Liquid';
+}
+
+
+interface WaterPaintMeta extends Meta {
+  paintName: string;
+}
+
+class WaterPaint extends Liquid {
+  entityName = 'Paint';
 }
 
 describe('Entity', function () {
   it('Should be created', () => {
-    const file = new FilmEntity(
-      {
-        duration: new Duration(0),
-      },
+    const file = new WaterPaint(
       {
         title: 'Madagaskar',
       },
+      [
+        
+      ]
     );
 
     expect(file).toHaveProperty('entityName', 'film');
     expect(file.properties.duration.getValue()).toBe(0);
-  })
+  });
 });
