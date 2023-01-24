@@ -1,34 +1,37 @@
-import { Observer, Subscriber } from './subscruber';
+import { Entity } from './entity';
 
 /**
  * Свойство
- * Все состоит из свойств
  */
-export abstract class Property<T>{
-  abstract readonly propertyName: string;
+export class Property<VALUE> {
+  private propName: string;
 
-  private data: T;
-
-  private subscribers: Subscriber<T>[] = [];
-
-  get value(): T {
-    return this.data;
+  get name(): string {
+    return this.propName;
   }
 
-  protected set value(value: T) {
-    this.data = value;
-    this.subscribers.forEach((sub) => sub.cb(value));
+  private propValue: VALUE;
+
+  get value(): VALUE {
+    return this.propValue;
   }
 
-  constructor(value: T) {
-    this.data = value;
+  set value(value: VALUE) {
+    this.propValue = value;
   }
 
-  watch(cb: (value: T) => any): Observer {
-    const subscriber = new Subscriber(cb);
-    this.subscribers.push(subscriber);
-    return subscriber.getObserver(this.subscribers);
+  protected owner?: Entity;
+
+  protected constructor(name: string, value: VALUE) {
+    this.propName = name;
+    this.propValue = value;
   }
-  
-  abstract change(...args: any[]): void;
+
+  static instance<V>(name: string, value: V): Property<V> {
+    return new this<V>(name, value);
+  }
+
+  setOwner(owner: Entity): void {
+    this.owner = owner;
+  }
 }
