@@ -1,9 +1,16 @@
 import { Entity } from './entity';
+import { PropertyValueType, SimplePropertyData } from './types';
 
 /**
  * Свойство
  */
 export class Property<VALUE> {
+  private propValueType: PropertyValueType;
+
+  get valueType(): PropertyValueType {
+    return this.propValueType;
+  }
+
   private propName: string;
 
   get name(): string {
@@ -22,13 +29,21 @@ export class Property<VALUE> {
 
   protected owner?: Entity;
 
-  protected constructor(name: string, value: VALUE) {
-    this.propName = name;
-    this.propValue = value;
+  protected constructor(data: SimplePropertyData) {
+    this.propName = data.name;
+    this.propValueType = data.valueType;
+
+    switch (data.valueType) {
+      case 'string':
+        this.propValue = data.value;
+        break;
+      default:
+        this.propValue = JSON.parse(data.value);
+    }
   }
 
-  static instance<V>(name: string, value: V): Property<V> {
-    return new this<V>(name, value);
+  static instance<V>(data: SimplePropertyData): Property<V> {
+    return new this<V>(data);
   }
 
   setOwner(owner: Entity): void {
