@@ -1,4 +1,4 @@
-import { DataStore } from './data-store';
+import { DataStore } from './data-store/data-store';
 
 export abstract class Factory<T, STORE extends DataStore> {
   dataStore: STORE;
@@ -7,5 +7,5 @@ export abstract class Factory<T, STORE extends DataStore> {
     this.dataStore = dataStore;
   }
 
-  abstract create(): T;
+  abstract create(...args: any[]): T;
 }

@@ -1,10 +1,9 @@
-import { Property } from './property';
-import { EntityData, PropertyList } from './types';
+import { EntityData, PropList } from './types';
 
 /**
- * Самый базовый объект всех сущностей.
+ * Сушность
  */
-export class Entity<PROPS extends PropertyList = PropertyList> {
+export class Entity<PROPS extends PropList = PropList> {
   protected data!: EntityData<PROPS>;
 
   get name(): string {
@@ -27,11 +26,7 @@ export class Entity<PROPS extends PropertyList = PropertyList> {
     if (data) this.data = data;
   }
 
-  getProperty<V>(propName: string): Property<V> {
+  getProperty<K extends keyof PROPS>(propName: K): PROPS[K] {
     return this.data.properties[propName];
-  }
-
-  setData(data: EntityData<PROPS>) {
-    this.data = data;
   }
 }

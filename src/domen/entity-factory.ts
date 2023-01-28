@@ -1,60 +1,49 @@
-import { PropertyList } from './../base-object/types';
-import { Entity } from 'src/base-object/entity';
-import { DataStore } from './../base-object/data-store';
+import { Entity } from 'src/base-object/entity/entity';
+import { DataStore } from '../base-object/data-store/data-store';
 import { Factory } from 'src/base-object/factory';
-import { EntityData, SimpleEntityData } from 'src/base-object/types';
-import { Property } from 'src/base-object/property';
+import { Property } from 'src/base-object/property/property';
+import { ID } from 'src/base-object/types';
+import { EntityDTO } from 'src/base-object/entity/entity.dto';
+import { EntityData } from 'src/base-object/entity/types';
 
 export class EntityFactory extends Factory<Entity, DataStore> {
-  queryDataByID(entityID: string): EntityData<any> {
-    const data = this.dataStore.getDataEntity(entityID);
-    const dataEntity: EntityData = {
-      id: data.id,
-      description: data.description,
-      name: data.name,
-      properties: Object.entries(data.properties).reduce<{
-        [p: string]: Property<any>;
-      }>((obj, [key, value]) => {
-        return { ...obj, [key]: Property.instance(value) };
-      }, {}),
-    };
-
-    return dataEntity;
-  }
-
-  generateData<PROPS extends PropertyList>(
-    data: SimpleEntityData
-  ): EntityData<PROPS> {
+  generateEntityData(data: EntityDTO): EntityData {
     return {
       id: this.dataStore.generateEntityID(),
-      description: '',
-      name: '',
-      properties: Object.entries(data.properties).reduce<PROPS>(
+      description: data.description,
+      name: data.name,
+      prototype: data.prototype,
+      properties: Object.entries(data.properties).reduce(
         (obj, [key, value]) => {
           return { ...obj, [key]: Property.instance(value) };
         },
-        {} as PROPS
+        {}
       ),
     };
   }
 
-  isSimpleEntityData(o: any): o is SimpleEntityData {
+  queryEntityDataByID(entityID: string): EntityData {
+    const data = this.dataStore.getDataEntity(entityID);
+    const dataEntity: EntityData = this.generateEntityData(data);
+
+    return dataEntity;
+  }
+
+  isEntityDTO(o: any): o is EntityDTO {
     return 'id' in o && 'description' in o && 'name' in o && 'properties' in o;
   }
 
-  create(simpleEntityData: SimpleEntityData): Entity;
-  create(entityID: string): Entity;
-  create<PROPS extends PropertyList>(
-    arg: string | SimpleEntityData
-  ): Entity<PROPS> {
+  create(simpleEntityData: EntityDTO): Entity;
+  create(entityID: ID): Entity;
+  create(arg: string | EntityDTO): Entity {
     const entityID = typeof arg === 'string' ? arg : undefined;
-    const simpleEntityData = this.isSimpleEntityData(arg) ? arg : undefined;
+    const simpleEntityData = this.isEntityDTO(arg) ? arg : undefined;
 
     if (entityID) {
-      return new Entity<PROPS>(this.queryDataByID(entityID));
+      return new Entity(this.queryEntityDataByID(entityID));
     }
     if (simpleEntityData) {
-      return new Entity<PROPS>(this.generateData(simpleEntityData));
+      return new Entity(this.generateEntityData(simpleEntityData));
     }
 
     throw new Error('Argument is not supported');
