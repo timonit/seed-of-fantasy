@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "experimentalDecorators": true,   /* Enable experimental support for TC39 stage 2 draft decorators. */
-    "emitDecoratorMetadata": true,    /* Emit design-type metadata for decorated declarations in source files. */
-    "module": "commonjs",             /* Specify what module code is generated. */
-    "moduleResolution": "node",       /* Specify how TypeScript looks up a file from a given module specifier. */
-    "baseUrl": "./",                  /* Specify the base directory to resolve non-relative module names. */
+    "target": "ESNext",
+    "lib": [
+      "ESNext"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "baseUrl": ".",
     "declaration": true,
     "outDir": "dist",
     "downlevelIteration": true,
@@ -13,9 +16,11 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "strict": true,
-//    "noImplicitOverride": true,
     "declarationMap": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
 
   "exclude": ["test"]
