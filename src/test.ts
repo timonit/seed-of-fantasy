@@ -1,4 +1,18 @@
 import { Entity } from './base';
+import { EntityPrototype, FieldTypePrototype } from './base/prototype';
+
+const vehiclePrototype = new FieldTypePrototype('veh', 'vehicle', 'simple');
+
+const enginePrototype = new FieldTypePrototype('eng', 'engine', 'simple');
+
+const carPrototype = new EntityPrototype(
+  'c',
+  'car',
+  [
+    vehiclePrototype,
+    enginePrototype
+  ]
+);
 
 const a = new Entity(
   "testId",
@@ -17,5 +31,4 @@ const a = new Entity(
   ]
 );
 
-console.log('a', a.getProperty('window'));
-console.log('name:', a.type);
+console.log('a', a);

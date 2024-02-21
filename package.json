@@ -16,7 +16,8 @@
     "build": "yarn tsc",
     "test": "jest",
     "ts-node": "node --experimental-specifier-resolution=node --loader ts-node/esm",
-    "ts-node:watch": "node --watch --experimental-specifier-resolution=node --loader ts-node/esm"
+    "ts-node:watch": "node --watch --experimental-specifier-resolution=node --loader ts-node/esm",
+    "ts-node:interactive": "node --experimental-specifier-resolution=node --loader ts-node/esm -i"
   },
   "dependencies": {
     "eslint": "^8.56.0",
